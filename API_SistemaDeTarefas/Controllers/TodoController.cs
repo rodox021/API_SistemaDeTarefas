@@ -7,13 +7,13 @@ namespace API_SistemaDeTarefas.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class TodoController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
+        private readonly ITodoRepository _todoRepository;
 
-        public UserController(IUserRepository userRepository)
+        public TodoController(ITodoRepository userRepository)
         {
-            _userRepository = userRepository;
+            _todoRepository = userRepository;
         }
         //========================================================================
 
@@ -22,8 +22,8 @@ namespace API_SistemaDeTarefas.Controllers
         public async Task<ActionResult<List<UserModel>>> BuscarTodosUsuarios()
         {
 
-            List<UserModel> users= await _userRepository.BuscarTodosUsuarios() ;
-            return Ok(users);
+            List<TodoModel> todo= await _todoRepository.BuscarTodastarefas() ;
+            return Ok(todo);
         } 
         
         //------------------------------------------------------------------------------------------------------------
@@ -32,45 +32,45 @@ namespace API_SistemaDeTarefas.Controllers
         public async Task<ActionResult<UserModel>> BuscarPorId(long id)
         {
 
-            UserModel users= await _userRepository.BuscarPorId(id) ;
-            return Ok(users);
+            TodoModel todo= await _todoRepository.BuscarPorId(id) ;
+            return Ok(todo);
         }
 
 
         //------------------------------------------------------------------------------------------------------------
 
         [HttpPost]
-        public async Task<ActionResult<UserModel>> Cadastrar([FromBody] UserModel user)
+        public async Task<ActionResult<TodoModel>> Cadastrar([FromBody] TodoModel todo)
         {
-            var newUser = await _userRepository.Adicionar(user); 
-            return Ok(newUser);
+            var newTodo = await _todoRepository.Adicionar(todo); 
+            return Ok(newTodo);
         }
 
         //------------------------------------------------------------------------------------------------------------
 
         [HttpPut]
-        public async Task<ActionResult<UserModel>> Atualizar([FromBody] UserModel user)
+        public async Task<ActionResult<TodoModel>> Atualizar([FromBody] TodoModel todo)
         {
             
 
-            if (user == null) 
+            if (todo == null) 
             {
                 return BadRequest();
             }
-            var newUser = await _userRepository.Atualizar(user, user.Id);
-            return Ok(newUser);
+            var newTodo = await _todoRepository.Atualizar(todo, todo.Id);
+            return Ok(newTodo);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<UserModel>>Apagar(long id)
+        public async Task<ActionResult<TodoModel>>Apagar(long id)
         {
-            var user = _userRepository.BuscarPorId(id);
-            if (user == null)
+            var todo = _todoRepository.BuscarPorId(id);
+            if (todo == null)
             {
                 return BadRequest();
             }
            
-            return Ok(await _userRepository.Apagar(id));
+            return Ok(await _todoRepository.Apagar(id));
         }
 
 
